@@ -41,9 +41,39 @@ def calculate_inventory_remaining(isbn):
 
 books_df["Inventory Remaining"] = books_df["Book ISBN"].apply(calculate_inventory_remaining)
 
+# Most Popular Books (Based on Order Count)
+book_order_count = {}
+for order in orders_df["Books Ordered"]:
+    for isbn in order:
+        if isbn in book_order_count:
+            book_order_count[isbn] += 1
+        else:
+            book_order_count[isbn] = 1
+
+# Merge with book titles to make it more readable
+popular_books = pd.DataFrame(book_order_count.items(), columns=["Book ISBN", "Order Count"])
+popular_books = popular_books.merge(books_df[["Book ISBN", "Book Title"]], on="Book ISBN")
+
 # Displaying the final data
 print(" ")
 print(f"Books Database:\n{books_df}\n")
-print(f"Average Order Size: {avg_order_size:.2f}")
-print(f"\nTop Customers Based on Total Purchase History:\n{top_customers}")
-print(f"\nInventory Left for Each Book:\n{books_df[['Book Title', 'Inventory Remaining']]}")
+
+print(" ")
+print("** QUESTIONS ASKED **")
+
+print(f"\n Q no 1: Most Popular Books (Based on Order Count):\n{popular_books.sort_values(by='Order Count', ascending=False)}")
+print(f"So, the most Popular Book according to our dataset is The Great Adventure with total order ount of 6")
+
+print(" ")
+print(f"Q no 2: Average Order Size is  {avg_order_size:.2f}")
+
+print(" ")
+print(f"\nQ no 3: Top Customers Based on Total Purchase History:\n{top_customers}")
+
+print(" ")
+print(f"\nQ no 4: Inventory Left for Each Book:\n{books_df[['Book Title', 'Inventory Remaining']]}")
+
+print(" ")
+print(f"This assignment was submmitted by Huzaifa Haris\nReg No: SE120222032 to Dr. M. Irfan Uddin")
+print("Thank you!!!")
+
